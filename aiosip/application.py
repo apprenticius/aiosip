@@ -144,7 +144,7 @@ class Application(MutableMapping):
         # yet aware of it. Try to match only with the from header tag
         if dialog is None:
             dialog = self._dialogs.get(frozenset((None, msg.from_details['params']['tag'], call_id)))
-            if msg.status_code == 401:
+            if isinstance(msg, Response) and msg.status_code == 401:
                 dialog.original_msg.cseq += 1
                 dialog.original_msg.to_details=Contact.from_header(msg.to_details['uri'].short_uri()) # die To-Adresse darf nicht ge tagged sein!
                 dialog.original_msg.headers['Authorization'] = msg.auth.generate_authorization(
